@@ -5,6 +5,12 @@ import { NextRequest, NextResponse } from "next/server";
 const middleware = createMiddleware({
   locales: APP.locales,
   defaultLocale: APP.defaultLocale,
+  // ✅ SEO 最佳实践：始终显示语言前缀
+  // 优点：
+  // 1. 每个语言版本都有明确的 URL
+  // 2. 搜索引擎可以正确识别和索引各语言版本
+  // 3. 便于实现 hreflang 标签
+  // 4. URL 结构一致，易于管理
   localePrefix: "always"
 });
 
