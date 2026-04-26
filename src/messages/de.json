@@ -1,3 +1,6 @@
 {
-  "title": "Bester Vape Shop"
+  "title": "Bester Vape Shop",
+  "notFound": {
+    "message": "Die gesuchte Seite existiert nicht."
+  }
 }

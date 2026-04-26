@@ -1,3 +1,6 @@
 {
-  "title": "Best Vape Store"
+  "title": "Best Vape Store",
+  "notFound": {
+    "message": "The page you are looking for does not exist."
+  }
 }

@@ -1,3 +1,6 @@
 {
-  "title": "Beste Vape Winkel"
+  "title": "Beste Vape Winkel",
+  "notFound": {
+    "message": "De pagina die u zoekt, bestaat niet."
+  }
 }
