@@ -239,3 +239,43 @@ A:
 1. 在 `src/lib/app.ts` 中添加语言代码到 `locales` 数组
 2. 创建对应的 `src/messages/{lang}.json` 文件
 3. 完成！所有类型会自动更新
+
+### 📁 Next.js 特殊文件放置规范
+
+根据 Next.js App Router 规范，以下特殊文件**必须**放在 `app/` 根目录：
+
+| 文件 | 访问路径 | 说明 |
+|------|---------|------|
+| `app/sitemap.ts` | `/sitemap.xml` | XML 站点地图（自动添加 `.xml`） |
+| `app/robots.ts` | `/robots.txt` | robots.txt 文件 |
+| `app/manifest.ts` | `/manifest.webmanifest` | PWA manifest |
+| `app/favicon.ico` | `/favicon.ico` | 网站图标 |
+
+**重要规则**:
+- ❌ **不要**在 `[locale]` 或其他动态路由下放置这些文件
+- ✅ **必须**在 `app/` 根目录下
+- 🌍 **多语言支持**: 在根文件中通过 `APP.locales` 生成所有语言版本的 URL
+
+**示例 - sitemap.ts**:
+```
+// app/sitemap.ts (正确位置)
+export default function sitemap(): MetadataRoute.Sitemap {
+  const routes: MetadataRoute.Sitemap = [];
+  
+  // 为每个语言生成首页 URL
+  APP.locales.forEach(locale => {
+    routes.push({
+      url: `${baseUrl}/${locale}`,
+      changeFrequency: 'weekly',
+      priority: 1,
+    });
+  });
+  
+  return routes;
+}
+```
+
+**访问方式**:
+- 浏览器访问: `http://localhost:3000/sitemap.xml`
+- Next.js 自动将 [sitemap.ts](file://d:\workspace\vape-buy\src\app\[locale]\sitemap.ts) 转换为 `/sitemap.xml`
+- Content-Type 自动设置为 `application/xml`
