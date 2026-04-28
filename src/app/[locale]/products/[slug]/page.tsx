@@ -1,19 +1,21 @@
 import fs from "fs";
 import path from "path";
 import { getProduct } from "@/lib/content/product";
-import { ProductParams, Product } from "@/types";
+import { Product } from "@/types";
 import { APP } from "@/lib/app";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import { resolveLocale } from "@/lib/utils/locale";
 
 type Props = {
-  params: Promise<ProductParams>;
+  params: Promise<{ locale: string; slug: string }>;
 };
 
 export default async function ProductPage({ params }: Props) {
-  const { slug, locale } = await params;
+  const { slug } = await params;
+  const locale = await resolveLocale(params);
   
   let product: Product | null = null;
   
@@ -73,7 +75,8 @@ export default async function ProductPage({ params }: Props) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug, locale } = await params;
+  const { slug } = await params;
+  const locale = await resolveLocale(params);
   const product = getProduct(slug, locale);
 
   return {

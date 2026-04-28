@@ -1,16 +1,17 @@
 import { getAllProducts } from "@/lib/content/product";
-import { LayoutParams, Product } from "@/types";
+import { Product } from "@/types";
 import Link from "next/link";
 import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { Metadata } from "next";
+import { resolveLocale } from "@/lib/utils/locale";
 
 type Props = {
-  params: Promise<LayoutParams>;
+  params: Promise<{ locale: string }>;
 };
 
 export default async function ProductsPage({ params }: Props) {
-  const { locale } = await params;
+  const locale = await resolveLocale(params);
   
   let products: Product[] = [];
   let hasError = false;
@@ -109,7 +110,7 @@ export default async function ProductsPage({ params }: Props) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale } = await params;
+  const locale = await resolveLocale(params);
   
   return {
     title: "Products - Vape Store",

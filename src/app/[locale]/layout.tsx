@@ -1,16 +1,17 @@
 import { NextIntlClientProvider } from "next-intl";
-import { LayoutParams } from "@/types";
 import { APP } from "@/lib/app";
 import { env } from "@/lib/env";
 import { Metadata } from "next";
+import { resolveLocale } from "@/lib/utils/locale";
 
 type Props = {
   children: React.ReactNode;
-  params: Promise<LayoutParams>;
+  params: Promise<{ locale: string }>;
 };
 
 export default async function Layout({ children, params }: Props) {
-  const { locale } = await params;
+  // ✅ 使用统一的 locale 解析器，自动处理类型转换和验证
+  const locale = await resolveLocale(params);
 
   return (
     <html lang={locale}>
@@ -32,7 +33,7 @@ export default async function Layout({ children, params }: Props) {
         />
       </head>
       <body>
-        <NextIntlClientProvider>
+        <NextIntlClientProvider locale={locale}>
           {children}
         </NextIntlClientProvider>
       </body>
@@ -41,7 +42,7 @@ export default async function Layout({ children, params }: Props) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale } = await params;
+  const locale = await resolveLocale(params);
   
   return {
     title: {

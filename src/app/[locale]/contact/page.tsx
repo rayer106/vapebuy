@@ -1,14 +1,14 @@
 import ContactForm from "@/components/ContactForm";
-import { LayoutParams } from "@/types";
+import { resolveLocale } from "@/lib/utils/locale";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { Metadata } from "next";
 
 type Props = {
-  params: Promise<LayoutParams>;
+  params: Promise<{ locale: string }>;
 };
 
 export default async function ContactPage({ params }: Props) {
-  const { locale } = await params;
+  const locale = await resolveLocale(params);
 
   return (
     <div style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>

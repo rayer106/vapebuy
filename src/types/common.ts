@@ -32,4 +32,4 @@ export type PaginatedResponse<T> = {
 /**
  * 状态类型
  */
-export type Status = 'idle' | 'loading' | 'success' | 'error';
+export type Status = 'idle' | 'submitting' | 'loading' | 'success' | 'error';
