@@ -17,16 +17,10 @@ export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
   const locale = await resolveLocale(params);
   
-  let product: Product | null = null;
+  // ✅ getProduct 现在返回 null 而不是抛出异常
+  const product = getProduct(slug, locale);
   
-  try {
-    product = getProduct(slug, locale);
-  } catch (error) {
-    console.error("Error loading product:", error);
-    notFound();
-  }
-  
-  // 如果产品不存在，返回 404
+  // 如果产品不存在，显示 404 页面
   if (!product || !product.title) {
     notFound();
   }
@@ -77,7 +71,16 @@ export default async function ProductPage({ params }: Props) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const locale = await resolveLocale(params);
+  
+  // ✅ getProduct 返回 null 时提供默认 metadata
   const product = getProduct(slug, locale);
+  
+  if (!product || !product.title) {
+    return {
+      title: "Product Not Found",
+      description: "The requested product does not exist."
+    };
+  }
 
   return {
     title: product.title,

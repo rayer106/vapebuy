@@ -14,5 +14,9 @@ type Props = {
  * 这个根布局作为 [locale] 动态路由的父级
  */
 export default function RootLayout({ children }: Props) {
-  return children;
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body>{children}</body>
+    </html>
+  );
 }

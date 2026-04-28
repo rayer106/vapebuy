@@ -14,7 +14,7 @@ export default async function Layout({ children, params }: Props) {
   const locale = await resolveLocale(params);
 
   return (
-    <html lang={locale}>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         {/* SEO: 添加 hreflang 标签，告诉搜索引擎多语言版本关系 */}
         {APP.locales.map((lang) => (
