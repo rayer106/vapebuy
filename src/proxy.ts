@@ -23,15 +23,17 @@ export default function proxy(req: NextRequest) {
   
   // 情况1：检查第一个段是否是有效的 locale
   if (firstSegment && !APP.locales.includes(firstSegment as Locale)) {
-    // 如果第一个段不是有效语言，保持原 URL 但显示 404 内容
-    return NextResponse.rewrite(new URL(`/${APP.defaultLocale}/not-found`, req.url));
-  }
-  
-  // 情况2：如果是有效语言，继续处理
-  if (firstSegment && APP.locales.includes(firstSegment as Locale)) {
-    // 检查是否有后续路径段
-    // 这里我们让 next-intl middleware 先处理，它会自动处理路由匹配
-    // 如果路由不存在，Next.js 会自动触发 not-found
+    //// 如果第一个段不是有效语言，保持原 URL 但显示 404 内容
+    //return NextResponse.rewrite(new URL(`/${APP.defaultLocale}/not-found`, req.url));
+
+    // ✅ 修复：如果访问根路径或没有语言前缀，重定向到默认语言
+    // 而不是直接返回 404
+    if (!firstSegment || pathname === '/') {
+      return NextResponse.redirect(new URL(`/${APP.defaultLocale}`, req.url));
+    }
+    
+    // 如果是其他无效路径，让 next-intl middleware 处理
+    // 它会自动判断是重定向还是显示 404
   }
   
   // 使用默认的 next-intl middleware 处理

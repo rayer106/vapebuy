@@ -1,6 +1,8 @@
 import { NextIntlClientProvider } from "next-intl";
-import { LayoutParams } from "@/types/layout";
+import { LayoutParams } from "@/types";
 import { APP } from "@/lib/app";
+import { env } from "@/lib/env";
+import { Metadata } from "next";
 
 type Props = {
   children: React.ReactNode;
@@ -13,20 +15,20 @@ export default async function Layout({ children, params }: Props) {
   return (
     <html lang={locale}>
       <head>
-        {/* ✅ SEO: 添加 hreflang 标签，告诉搜索引擎多语言版本关系 */}
+        {/* SEO: 添加 hreflang 标签，告诉搜索引擎多语言版本关系 */}
         {APP.locales.map((lang) => (
           <link
             key={lang}
             rel="alternate"
             hrefLang={lang}
-            href={`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${lang}`}
+            href={`${env.NEXT_PUBLIC_SITE_URL}/${lang}`}
           />
         ))}
         {/* x-default 指向默认语言版本 */}
         <link
           rel="alternate"
           hrefLang="x-default"
-          href={`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${APP.defaultLocale}`}
+          href={`${env.NEXT_PUBLIC_SITE_URL}/${APP.defaultLocale}`}
         />
       </head>
       <body>
@@ -36,4 +38,22 @@ export default async function Layout({ children, params }: Props) {
       </body>
     </html>
   );
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  
+  return {
+    title: {
+      template: `%s | ${APP.name}`,
+      default: APP.name,
+    },
+    description: `Welcome to ${APP.name} - Your trusted B2B partner`,
+    alternates: {
+      canonical: `${env.NEXT_PUBLIC_SITE_URL}/${locale}`,
+      languages: Object.fromEntries(
+        APP.locales.map((lang) => [lang, `${env.NEXT_PUBLIC_SITE_URL}/${lang}`])
+      ),
+    },
+  };
 }
