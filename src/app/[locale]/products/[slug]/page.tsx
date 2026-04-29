@@ -1,7 +1,6 @@
 import fs from "fs";
 import path from "path";
 import { getProduct } from "@/lib/content/product";
-import { Product } from "@/types";
 import { APP } from "@/lib/app";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import Image from "next/image";
